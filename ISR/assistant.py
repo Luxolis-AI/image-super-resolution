@@ -23,8 +23,12 @@ def run(config_file, default=False, training=False, prediction=False):
     gen = module.make_model(conf['generators'][generator], lr_patch_size)
     if session_type == 'prediction':
         from ISR.predict.predictor import Predictor
+        from dotenv import load_dotenv
+        load_dotenv()
         
-        pr_h = Predictor(input_dir=conf['test_sets'][dataset])
+        env_out_dir =  os.getenv("OUT_DIR")
+        
+        pr_h = Predictor(input_dir=conf['test_sets'][dataset], output_dir=env_out_dir)
         pr_h.get_predictions(gen, conf['weights_paths']['generator'])
     
     elif session_type == 'training':
