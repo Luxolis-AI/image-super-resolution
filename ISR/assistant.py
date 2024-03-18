@@ -14,7 +14,7 @@ def _get_module(generator):
 def run(config_file, default=False, training=False, prediction=False):
     os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
     logger = get_logger(__name__)
-    session_type, generator, conf, dataset = setup(config_file, default, training, prediction)
+    session_type, generator, conf, dataset, output_dir = setup(config_file, default, training, prediction)
     
     lr_patch_size = conf['session'][session_type]['patch_size']
     scale = conf['generators'][generator]['x']
@@ -26,8 +26,8 @@ def run(config_file, default=False, training=False, prediction=False):
         from dotenv import load_dotenv
         load_dotenv()
         
-        env_out_dir =  os.getenv("OUT_DIR")
-        
+        env_out_dir = os.getenv("OUT_DIR")
+
         pr_h = Predictor(input_dir=conf['test_sets'][dataset], output_dir=env_out_dir)
         pr_h.get_predictions(gen, conf['weights_paths']['generator'])
     
